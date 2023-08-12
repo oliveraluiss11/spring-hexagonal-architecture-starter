@@ -1,6 +1,6 @@
-package com.oliveraluis.architecturehexagonalstarter.posts.infrastructure.inbound.controllers;
+package com.oliveraluis.architecturehexagonalstarter.todos.infrastructure.inbound.controllers;
 
-import com.oliveraluis.architecturehexagonalstarter.posts.application.find.PostFindUseCase;
+import com.oliveraluis.architecturehexagonalstarter.todos.application.find.TodoFindUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-public class UserController {
-    private final PostFindUseCase postFindUseCase;
-    @GetMapping("/{id}/posts")
+public class UserTodoController {
+    private final TodoFindUseCase todoFindUseCase;
+    @GetMapping("/{id}/todos")
     public ResponseEntity findAllPosts(@PathVariable Integer id){
-        return ResponseEntity.ok(this.postFindUseCase.findAllPostsByUserId(id));
+        return ResponseEntity.ok(this.todoFindUseCase.findAllTodosByUserId(id));
     }
 }

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "${json-placeholder.client.name}", url = "${json-placeholder.url}")
-public interface JsonPlaceholderAPIClient {
+@FeignClient(name = "${json-placeholder.client.name}-posts", url = "${json-placeholder.url}/posts")
+public interface JsonPlaceholderPostAPIClient {
     @PostMapping
     PostQuery create(@RequestBody PostCommand request);
 
