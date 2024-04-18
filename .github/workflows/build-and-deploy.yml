@@ -28,3 +28,4 @@ jobs:
         run: |
           docker build -t architecture-hexagonal-starter .
           docker tag architecture-hexagonal-starter ${{ secrets.DOCKER_USERNAME }}/architecture-hexagonal-starter:develop
+          docker push ${{ secrets.DOCKER_USERNAME }}/architecture-hexagonal-starter:develop
