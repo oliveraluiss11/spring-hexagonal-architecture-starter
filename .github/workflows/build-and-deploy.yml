@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4.2.1
@@ -29,3 +29,10 @@ jobs:
           docker build -t architecture-hexagonal-starter .
           docker tag architecture-hexagonal-starter ${{ secrets.DOCKER_USERNAME }}/architecture-hexagonal-starter:develop
           docker push ${{ secrets.DOCKER_USERNAME }}/architecture-hexagonal-starter:develop
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.MY_RENDER_API_KEY }}
+          wait-for-success: true
+      
