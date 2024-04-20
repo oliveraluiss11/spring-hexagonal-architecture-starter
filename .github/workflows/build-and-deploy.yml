@@ -29,6 +29,11 @@ jobs:
           docker build -t architecture-hexagonal-starter .
           docker tag architecture-hexagonal-starter ${{ secrets.DOCKER_USERNAME }}/architecture-hexagonal-starter:develop
           docker push ${{ secrets.DOCKER_USERNAME }}/architecture-hexagonal-starter:develop
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
       - name: Deploy to production
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
