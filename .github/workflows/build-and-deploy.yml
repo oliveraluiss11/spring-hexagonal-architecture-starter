@@ -9,8 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      SPRING_PROFILES_ACTIVE: ${{ steps.set_profile.outputs.profile }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -33,7 +31,9 @@ jobs:
           distribution: 'corretto'
           
       - name: Build with Maven
-        run: mvn clean package -Dspring.profiles.active=${{ steps.set_profile.outputs.profile }}
+        run: |
+          export SPRING_PROFILES_ACTIVE=$(/bin/bash -c 'echo "${{ steps.set_profile.outputs.profile }}"')
+          mvn clean package -Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}
 
       - name: Log in to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
