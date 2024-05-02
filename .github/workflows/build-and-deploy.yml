@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - develop
 
 jobs:
   build:
@@ -13,27 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Determine Spring profile
-        id: set_profile
-        run: |
-          if [ "${{ github.ref }}" = 'refs/heads/main' ]; then
-            echo "prod"
-          elif [ "${{ github.ref }}" = 'refs/heads/develop' ]; then
-            echo "dev"
-          else
-            echo "default"
-          fi
-
       - name: Set up JDK 17
         uses: actions/setup-java@v4.2.1
         with:
           java-version: '17'
           distribution: 'corretto'
-          
+
       - name: Build with Maven
-        run: |
-          export SPRING_PROFILES_ACTIVE=$(/bin/bash -c 'echo "${{ steps.set_profile.outputs.profile }}"')
-          mvn clean package -Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}
+        run: mvn clean package
 
       - name: Log in to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
@@ -41,8 +27,8 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t architecture-hexagonal-starter .
-          docker tag architecture-hexagonal-starter ${{ secrets.DOCKER_USERNAME }}/architecture-hexagonal-starter:${{ github.ref == 'refs/heads/main' && 'prod' || github.ref == 'refs/heads/develop' && 'dev' }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/architecture-hexagonal-starter:${{ github.ref == 'refs/heads/main' && 'prod' || github.ref == 'refs/heads/develop' && 'dev' }}
+          docker tag architecture-hexagonal-starter ${{ secrets.DOCKER_USERNAME }}/architecture-hexagonal-starter:develop
+          docker push ${{ secrets.DOCKER_USERNAME }}/architecture-hexagonal-starter:develop
 
   deploy:
     runs-on: ubuntu-latest
